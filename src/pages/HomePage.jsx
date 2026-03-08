@@ -104,7 +104,7 @@ const HomePage = () => {
               </div>
             </div>
 
-            <div className="hidden lg:block">
+           <div className="mt-10 lg:mt-0">
               <div className="relative">
   <div className="grid grid-cols-2 gap-6">
 
