@@ -88,7 +88,6 @@ const NavBar = ({
                     </span>
                   </div>
 
-                  {/* 3 DOTS */}
                   <button
                     onClick={() => setOpenDropdown(!openDropdown)}
                     className="p-2 rounded-lg hover:bg-gray-100"
@@ -96,7 +95,6 @@ const NavBar = ({
                     <MoreVertical className="w-5 h-5" />
                   </button>
 
-                  {/* DROPDOWN */}
                   {openDropdown && (
                     <div className="absolute right-0 top-14 w-52 bg-white shadow-2xl rounded-xl p-2 z-50 border">
 
@@ -160,6 +158,53 @@ const NavBar = ({
           </button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden bg-white border-t border-gray-200 shadow-md">
+          <div className="px-4 py-4 space-y-2">
+
+            {navItems.map((tab) => (
+              <button
+                key={tab.path}
+                onClick={() => {
+                  navigate(tab.path);
+                  setMobileMenuOpen(false);
+                }}
+                className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100"
+              >
+                {tab.icon}
+                <span>{tab.label}</span>
+              </button>
+            ))}
+
+            {isLoggedIn ? (
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setMobileMenuOpen(false);
+                }}
+                className="flex items-center gap-3 w-full px-4 py-3 text-red-600 hover:bg-gray-100 rounded-lg"
+              >
+                <LogOut size={16} />
+                Logout
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setShowLoginModal(true);
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg"
+              >
+                Login
+              </button>
+            )}
+
+          </div>
+        </div>
+      )}
+
     </nav>
   );
 };
