@@ -274,8 +274,41 @@ router.put("/booking/:id/accept", authMiddleware, async (req, res) => {
 router.put("/booking/:id/complete", authMiddleware, async (req, res) => {
   try {
 
+    // 1. Find booking
     const booking = await Booking.findById(req.params.id);
 
+    // 2. Check booking exists
+    if (!booking) {
+      return res.status(404).json({
+        msg: "Booking not found"
+      });
+    }
+
+    // 3. Only provider can complete booking
+    if (req.user.role !== "provider") {
+      return res.status(403).json({
+        msg: "Only providers can complete bookings"
+      });
+    }
+
+    // 4. Check booking belongs to this provider
+    if (
+      !booking.providerId ||
+      booking.providerId.toString() !== req.user.id
+    ) {
+      return res.status(403).json({
+        msg: "You are not authorized to complete this booking"
+      });
+    }
+
+    // 5. Booking must first be accepted
+    if (booking.status !== "accepted") {
+      return res.status(400).json({
+        msg: "Only accepted bookings can be completed"
+      });
+    }
+
+    // 6. Complete booking
     booking.status = "completed";
 
     await booking.save();
